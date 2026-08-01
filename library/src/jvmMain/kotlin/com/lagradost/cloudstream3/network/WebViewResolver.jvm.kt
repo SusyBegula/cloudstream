@@ -36,6 +36,7 @@ actual class WebViewResolver actual constructor(
     actual companion object {
         actual val DEFAULT_TIMEOUT = 60_000L
         actual var webViewUserAgent: String? = null
+        var webViewHandler: (suspend (Request, (Request) -> Boolean) -> Pair<Request?, List<Request>>)? = null
     }
 
     actual suspend fun resolveUsingWebView(
@@ -68,7 +69,7 @@ actual class WebViewResolver actual constructor(
         request: Request,
         requestCallBack: (Request) -> Boolean
     ): Pair<Request?, List<Request>> {
-        TODO("Not yet implemented")
+        return webViewHandler?.invoke(request, requestCallBack) ?: (null to emptyList())
     }
 }
 
