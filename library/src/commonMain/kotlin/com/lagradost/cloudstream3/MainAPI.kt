@@ -2523,11 +2523,7 @@ constructor(
 
 @OptIn(FormatStringsInDatetimeFormats::class)
 fun Episode.addDate(date: String?, format: String = "yyyy-MM-dd") {
-    // A blank string reaching here (some providers pass "" instead of null for a missing air
-    // date) would otherwise fall through to two doomed parse attempts per call, each throwing and
-    // logging a full stack trace — cheap in isolation, but providers that hit this for every
-    // episode can turn a single load() call into thousands of exceptions and minutes of overhead.
-    if (date.isNullOrBlank()) return
+    if (date == null) return
     this.date = runCatching {
         // First try standard ISO 8601 (e.g. "2026-01-01T12:30:00.000Z", "2026-05-17T14:35+02:00")
         runCatching { Instant.parse(date).toEpochMilliseconds() }

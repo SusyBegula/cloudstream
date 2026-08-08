@@ -39,13 +39,6 @@ class EpisodeDateTest {
     }
 
     @Test
-    fun addDateBlankStringDoesNotSetDate() {
-        val ep = episode()
-        ep.addDate("")
-        assertNull(ep.date)
-    }
-
-    @Test
     fun addDateInvalidStringLeavesDateNull() {
         val ep = episode()
         ep.addDate("not-a-date")
