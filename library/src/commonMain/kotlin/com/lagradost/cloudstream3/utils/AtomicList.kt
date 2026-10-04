@@ -34,6 +34,22 @@ open class AtomicList<T>(
 
     operator fun plus(element: T): AtomicList<T> = synchronized(this) { AtomicList(delegate + element) }
     operator fun plus(elements: Collection<T>): AtomicList<T> = synchronized(this) { AtomicList(delegate + elements) }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is List<*>) return false
+        val snapshot = synchronized(this) { delegate.toList() }
+        val otherSnapshot = if (other is AtomicList<*>) synchronized(other) { other.delegate.toList() } else other
+        return snapshot == otherSnapshot
+    }
+
+    override fun hashCode(): Int = synchronized(this) {
+        delegate.hashCode()
+    }
+
+    override fun toString(): String = synchronized(this) {
+        delegate.toString()
+    }
 }
 
 class AtomicMutableList<T>(
